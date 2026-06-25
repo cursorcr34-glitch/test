@@ -1,0 +1,172 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  BUYER
+  SELLER
+  AGENT
+  ADMIN
+}
+
+enum ListingType {
+  SALE
+  RENT
+}
+
+enum PropertyType {
+  APARTMENT
+  HOUSE
+  COMMERCIAL
+  LAND
+}
+
+enum PropertyStatus {
+  DRAFT
+  ACTIVE
+  SOLD
+  RENTED
+  ARCHIVED
+}
+
+enum District {
+  NARIMANOV
+  YASAMAL
+  XETAI
+  SEBAIL
+  BADAMDAR
+  GENCE
+}
+
+enum InquiryStatus {
+  NEW
+  CONTACTED
+  VIEWING
+  NEGOTIATING
+  CLOSED
+  REJECTED
+}
+
+enum Locale {
+  AZ
+  EN
+  RU
+}
+
+model User {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  passwordHash String
+  name         String
+  phone        String?
+  role         Role       @default(BUYER)
+  locale       Locale     @default(AZ)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  agentProfile Agent?
+  properties   Property[] @relation("PropertyOwner")
+  inquiries    Inquiry[]
+  favorites    Favorite[]
+
+  @@map("users")
+}
+
+model Agent {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  licenseNumber String   @unique
+  bioAz         String?
+  bioEn         String?
+  bioRu         String?
+  avatarUrl     String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  properties Property[] @relation("PropertyAgent")
+
+  @@map("agents")
+}
+
+model Property {
+  id             String         @id @default(cuid())
+  titleAz        String
+  titleEn        String
+  titleRu        String
+  descriptionAz  String
+  descriptionEn  String
+  descriptionRu  String
+  price          Decimal        @db.Decimal(12, 2)
+  currency       String         @default("AZN")
+  listingType    ListingType
+  propertyType   PropertyType
+  rooms          Int
+  area           Float
+  floor          Int?
+  totalFloors    Int?
+  district       District
+  address        String
+  latitude       Float
+  longitude      Float
+  amenities      String[]
+  photos         String[]
+  floorPlanUrl   String?
+  status         PropertyStatus @default(DRAFT)
+  ownerId        String
+  agentId        String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  owner     User       @relation("PropertyOwner", fields: [ownerId], references: [id])
+  agent     Agent?     @relation("PropertyAgent", fields: [agentId], references: [id])
+  inquiries Inquiry[]
+  favorites Favorite[]
+
+  @@index([district])
+  @@index([listingType])
+  @@index([propertyType])
+  @@index([status])
+  @@index([price])
+  @@index([rooms])
+  @@map("properties")
+}
+
+model Inquiry {
+  id         String        @id @default(cuid())
+  propertyId String
+  userId     String?
+  name       String
+  email      String
+  phone      String
+  message    String
+  status     InquiryStatus @default(NEW)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  user     User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+  @@index([propertyId])
+  @@map("inquiries")
+}
+
+model Favorite {
+  id         String   @id @default(cuid())
+  userId     String
+  propertyId String
+  createdAt  DateTime @default(now())
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, propertyId])
+  @@map("favorites")
+}

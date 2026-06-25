@@ -1,0 +1,17 @@
+{
+  "name": "rentacar-platform",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w @rentacar/api",
+    "build": "npm run build -w @rentacar/db && npm run build -w @rentacar/api",
+    "db:generate": "npm run db:generate -w @rentacar/db",
+    "db:migrate": "npm run db:migrate -w @rentacar/db",
+    "db:seed": "npm run db:seed -w @rentacar/db",
+    "db:studio": "npm run db:studio -w @rentacar/db"
+  }
+}

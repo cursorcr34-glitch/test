@@ -1,0 +1,298 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Auth & Users ───────────────────────────────────────────────────────────
+
+enum Role {
+  CUSTOMER
+  STAFF
+  ADMIN
+}
+
+model User {
+  id           String         @id @default(cuid())
+  email        String         @unique
+  passwordHash String
+  firstName    String
+  lastName     String
+  phone        String?
+  role         Role           @default(CUSTOMER)
+  isActive     Boolean        @default(true)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  bookings     Booking[]
+  refreshTokens RefreshToken[]
+
+  @@index([role])
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("refresh_tokens")
+}
+
+// ─── Locations ──────────────────────────────────────────────────────────────
+
+model Location {
+  id             String    @id @default(cuid())
+  name           String
+  slug           String    @unique
+  city           String
+  address        String
+  latitude       Float?
+  longitude      Float?
+  isActive       Boolean   @default(true)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  cars           Car[]
+  pickupBookings Booking[] @relation("PickupLocation")
+  returnBookings Booking[] @relation("ReturnLocation")
+
+  @@index([city])
+  @@index([isActive])
+  @@map("locations")
+}
+
+// ─── Fleet ────────────────────────────────────────────────────────────────────
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  cars        Car[]
+
+  @@map("categories")
+}
+
+enum Transmission {
+  AUTOMATIC
+  MANUAL
+}
+
+enum FuelType {
+  PETROL
+  DIESEL
+  ELECTRIC
+  HYBRID
+}
+
+enum CarStatus {
+  AVAILABLE
+  RENTED
+  MAINTENANCE
+  RETIRED
+}
+
+model Car {
+  id           String       @id @default(cuid())
+  slug         String       @unique
+  make         String
+  model        String
+  year         Int
+  categoryId   String
+  category     Category     @relation(fields: [categoryId], references: [id])
+  locationId   String
+  location     Location     @relation(fields: [locationId], references: [id])
+  dailyRate    Decimal      @db.Decimal(10, 2)
+  currency     String       @default("AZN")
+  transmission Transmission
+  fuelType     FuelType
+  seats        Int
+  doors        Int
+  luggage      Int
+  horsepower   Int?
+  mileageLimit Int          @default(300)
+  color        String
+  licensePlate String       @unique
+  status       CarStatus    @default(AVAILABLE)
+  isPopular    Boolean      @default(false)
+  description  String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  images       CarImage[]
+  features     CarFeature[]
+  bookings     Booking[]
+
+  @@index([categoryId])
+  @@index([locationId])
+  @@index([status])
+  @@index([dailyRate])
+  @@index([isPopular])
+  @@index([make, model])
+  @@index([status, categoryId, dailyRate])
+  @@index([status, locationId])
+  @@map("cars")
+}
+
+model CarImage {
+  id        String  @id @default(cuid())
+  carId     String
+  car       Car     @relation(fields: [carId], references: [id], onDelete: Cascade)
+  url       String
+  alt       String?
+  sortOrder Int     @default(0)
+  isPrimary Boolean @default(false)
+
+  @@index([carId])
+  @@index([carId, sortOrder])
+  @@map("car_images")
+}
+
+enum FeatureCategory {
+  COMFORT
+  SAFETY
+  ENTERTAINMENT
+  PERFORMANCE
+}
+
+model CarFeature {
+  id       String          @id @default(cuid())
+  carId    String
+  car      Car             @relation(fields: [carId], references: [id], onDelete: Cascade)
+  name     String
+  category FeatureCategory @default(COMFORT)
+
+  @@index([carId])
+  @@index([carId, category])
+  @@map("car_features")
+}
+
+// ─── Add-ons ──────────────────────────────────────────────────────────────────
+
+enum AddOnPricingType {
+  PER_DAY
+  FIXED
+}
+
+model AddOn {
+  id          String           @id @default(cuid())
+  name        String
+  slug        String           @unique
+  description String?
+  pricingType AddOnPricingType @default(PER_DAY)
+  price       Decimal          @db.Decimal(10, 2)
+  currency    String           @default("AZN")
+  isActive    Boolean          @default(true)
+  sortOrder   Int              @default(0)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  bookingAddOns BookingAddOn[]
+
+  @@index([isActive])
+  @@map("add_ons")
+}
+
+// ─── Bookings & Payments ──────────────────────────────────────────────────────
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+model Booking {
+  id               String        @id @default(cuid())
+  bookingNumber    String        @unique
+  userId           String
+  user             User          @relation(fields: [userId], references: [id])
+  carId            String
+  car              Car           @relation(fields: [carId], references: [id])
+  pickupLocationId String
+  pickupLocation   Location      @relation("PickupLocation", fields: [pickupLocationId], references: [id])
+  returnLocationId String
+  returnLocation   Location      @relation("ReturnLocation", fields: [returnLocationId], references: [id])
+  pickupDate       DateTime
+  returnDate       DateTime
+  status           BookingStatus @default(PENDING)
+  dailyRate        Decimal       @db.Decimal(10, 2)
+  rentalDays       Int
+  subtotal         Decimal       @db.Decimal(10, 2)
+  addOnsTotal      Decimal       @db.Decimal(10, 2) @default(0)
+  taxRate          Decimal       @db.Decimal(5, 4)  @default(0.18)
+  taxAmount        Decimal       @db.Decimal(10, 2) @default(0)
+  totalAmount      Decimal       @db.Decimal(10, 2)
+  currency         String        @default("AZN")
+  notes            String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  addOns           BookingAddOn[]
+  payment          Payment?
+
+  @@index([userId])
+  @@index([carId])
+  @@index([status])
+  @@index([pickupDate])
+  @@index([returnDate])
+  @@index([userId, status])
+  @@index([carId, pickupDate, returnDate])
+  @@index([status, pickupDate])
+  @@map("bookings")
+}
+
+model BookingAddOn {
+  id         String  @id @default(cuid())
+  bookingId  String
+  booking    Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  addOnId    String
+  addOn      AddOn   @relation(fields: [addOnId], references: [id])
+  quantity   Int     @default(1)
+  unitPrice  Decimal @db.Decimal(10, 2)
+  totalPrice Decimal @db.Decimal(10, 2)
+
+  @@unique([bookingId, addOnId])
+  @@index([bookingId])
+  @@map("booking_add_ons")
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  DEBIT_CARD
+  BANK_TRANSFER
+  CASH
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  bookingId     String        @unique
+  booking       Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  amount        Decimal       @db.Decimal(10, 2)
+  currency      String        @default("AZN")
+  status        PaymentStatus @default(PENDING)
+  method        PaymentMethod
+  transactionId String?
+  paidAt        DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([status])
+  @@index([transactionId])
+  @@map("payments")
+}

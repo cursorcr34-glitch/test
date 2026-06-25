@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import './types/fastify-auth.js';
 import { loadEnv } from './config/env.js';
 import { buildApp } from './app.js';
 

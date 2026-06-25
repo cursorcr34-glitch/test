@@ -8,25 +8,6 @@ export const slugParamSchema = z.object({
   slug: z.string().min(1),
 });
 
-export const registerSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8).max(128),
-  firstName: z.string().min(1).max(100),
-  lastName: z.string().min(1).max(100),
-  phone: z.string().optional(),
-});
-
-export const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(1),
-});
-
-export const updateProfileSchema = z.object({
-  firstName: z.string().min(1).max(100).optional(),
-  lastName: z.string().min(1).max(100).optional(),
-  phone: z.string().nullable().optional(),
-});
-
 export const carSearchSchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(50).default(12),
@@ -78,9 +59,6 @@ export const updateBookingStatusSchema = z.object({
   status: z.enum(['PENDING', 'CONFIRMED', 'ACTIVE', 'COMPLETED', 'CANCELLED']),
 });
 
-export type RegisterInput = z.infer<typeof registerSchema>;
-export type LoginInput = z.infer<typeof loginSchema>;
-export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;
 export type CarSearchInput = z.infer<typeof carSearchSchema>;
 export type QuoteInput = z.infer<typeof quoteSchema>;
 export type CreateBookingInput = z.infer<typeof createBookingSchema>;

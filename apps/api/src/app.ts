@@ -3,9 +3,8 @@ import cors from '@fastify/cors';
 import sensible from '@fastify/sensible';
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 import { ZodError } from 'zod';
+import { loadAuthConfig, authPlugin, authRoutes, isAuthError } from '@rentacar/auth';
 import prismaPlugin from './plugins/prisma.js';
-import authPlugin from './plugins/auth.js';
-import { authRoutes } from './routes/auth.routes.js';
 import { carRoutes } from './routes/car.routes.js';
 import { bookingRoutes, adminBookingRoutes } from './routes/booking.routes.js';
 import { locationRoutes } from './routes/location.routes.js';
@@ -30,7 +29,9 @@ export async function buildApp(env: Env) {
 
   await app.register(sensible);
   await app.register(prismaPlugin);
-  await app.register(authPlugin);
+
+  const authConfig = loadAuthConfig(process.env);
+  await app.register(authPlugin, { config: authConfig, prisma: app.prisma });
 
   app.setErrorHandler((error: Error & { statusCode?: number }, _request, reply) => {
     if (error instanceof ZodError) {
@@ -38,6 +39,13 @@ export async function buildApp(env: Env) {
         error: 'Validation Error',
         message: 'Invalid request data',
         details: error.flatten().fieldErrors,
+      });
+    }
+
+    if (isAuthError(error)) {
+      return reply.status(error.statusCode).send({
+        error: error.code,
+        message: error.message,
       });
     }
 

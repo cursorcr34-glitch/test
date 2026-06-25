@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Emlak.az — Real Estate Platform (Frontend)
+
+Premium customer-facing web app for Azerbaijan's real estate market. Built with Next.js 14 App Router, TypeScript, and CSS design tokens.
+
+## Features
+
+- **Browse listings** — Sale/rent properties with district, price, room, and type filters
+- **Property detail** — Photo gallery, map, amenities, floor plan, sticky inquiry panel
+- **Multi-language** — AZ / EN / RU with locale switcher
+- **Auth** — JWT login/register (buyer, seller, agent roles)
+- **Favorites** — Saved listings for authenticated users
+- **Admin panel** — Listings, inquiries, agents, analytics dashboard with district heatmap
+- **Mock data fallback** — Works offline without backend; connects to API when available
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
+cp .env.example .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3001
+NEXT_PUBLIC_DEFAULT_LOCALE=AZ
+```
 
-## Learn More
+When `NEXT_PUBLIC_API_URL` is set, the app calls the Fastify backend API. Otherwise, mock data is used automatically.
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+src/
+├── app/                  # Next.js App Router pages
+│   ├── admin/            # Admin panel (dashboard, listings, inquiries, agents)
+│   ├── properties/       # Browse + detail pages
+│   ├── login/            # Auth pages
+│   └── favorites/
+├── components/
+│   ├── ui/               # Button, Badge, Input, Skeleton, Empty/Error states
+│   ├── layout/           # Navbar, Footer
+│   ├── home/             # Hero, Featured, Districts
+│   └── property/         # Cards, Filters, Gallery, Map, Inquiry
+├── contexts/             # Auth + Locale providers
+├── lib/                  # API client, i18n, format, mock data
+└── types/                # TypeScript interfaces
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Design System
 
-## Deploy on Vercel
+- CSS variables in `globals.css` (primary, surface, accent, success, danger)
+- Inter font via `next/font`
+- Responsive breakpoints: 375 / 768 / 1024 / 1280
+- 44px minimum touch targets
+- Loading skeleton, empty, and error states on all data fetches
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Backend Integration
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Connect to the Fastify API on branch `cursor/backend-platform-apis-70ea`:
+
+| Endpoint | Description |
+|----------|-------------|
+| `GET /api/properties` | Search/filter listings |
+| `GET /api/properties/:id` | Property detail |
+| `POST /api/inquiries` | Submit inquiry |
+| `GET /api/districts` | District list |
+| `POST /api/auth/login` | Authentication |
+| `GET /api/analytics/dashboard` | Admin stats |
+
+## Scripts
+
+```bash
+npm run dev      # Development server
+npm run build    # Production build
+npm run start    # Production server
+npm run lint     # ESLint
+```

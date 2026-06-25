@@ -1,0 +1,15 @@
+{
+  "name": "emlak-qa",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:unit": "vitest run --config vitest.config.ts tests/unit",
+    "test:integration": "vitest run --config vitest.config.ts tests/integration",
+    "test:e2e": "vitest run --config vitest.config.ts tests/e2e",
+    "test": "npm run test:unit && npm run test:integration && npm run test:e2e",
+    "verify": "node scripts/generate-report.mjs"
+  },
+  "devDependencies": {
+    "vitest": "^3.2.4"
+  }
+}

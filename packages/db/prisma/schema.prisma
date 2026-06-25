@@ -1,0 +1,329 @@
+// Emlak — Azerbaijan Real Estate Platform
+// PostgreSQL schema for properties, users, inquiries, favorites, and agents
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Enums
+// ---------------------------------------------------------------------------
+
+enum UserRole {
+  BUYER
+  SELLER
+  AGENT
+  ADMIN
+}
+
+enum Locale {
+  AZ
+  EN
+  RU
+}
+
+enum ListingType {
+  SALE
+  RENT
+}
+
+enum PropertyType {
+  APARTMENT
+  HOUSE
+  VILLA
+  COMMERCIAL
+  LAND
+  OFFICE
+}
+
+enum ListingStatus {
+  DRAFT
+  ACTIVE
+  PENDING
+  SOLD
+  RENTED
+  ARCHIVED
+}
+
+enum InquiryStatus {
+  NEW
+  CONTACTED
+  VIEWING_SCHEDULED
+  NEGOTIATING
+  CLOSED_WON
+  CLOSED_LOST
+}
+
+// ---------------------------------------------------------------------------
+// Users & Agents
+// ---------------------------------------------------------------------------
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  firstName    String   @map("first_name")
+  lastName     String   @map("last_name")
+  phone        String?
+  role         UserRole @default(BUYER)
+  locale       Locale   @default(AZ)
+  avatarUrl    String?  @map("avatar_url")
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  agentProfile      AgentProfile?
+  ownedProperties   Property[]    @relation("PropertyOwner")
+  inquiries         Inquiry[]     @relation("InquiryRequester")
+  assignedInquiries Inquiry[]     @relation("InquiryAssignee")
+  favorites         Favorite[]
+
+  @@index([role])
+  @@index([isActive])
+  @@map("users")
+}
+
+model AgentProfile {
+  id            String   @id @default(cuid())
+  userId        String   @unique @map("user_id")
+  licenseNo     String?  @map("license_no")
+  bioAz         String?  @map("bio_az") @db.Text
+  bioEn         String?  @map("bio_en") @db.Text
+  bioRu         String?  @map("bio_ru") @db.Text
+  agencyName    String?  @map("agency_name")
+  rating        Float    @default(0)
+  listingsCount Int      @default(0) @map("listings_count")
+  isVerified    Boolean  @default(false) @map("is_verified")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  properties Property[] @relation("PropertyAgent")
+
+  @@index([isVerified])
+  @@map("agent_profiles")
+}
+
+// ---------------------------------------------------------------------------
+// Geography
+// ---------------------------------------------------------------------------
+
+model District {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  nameAz    String   @map("name_az")
+  nameEn    String   @map("name_en")
+  nameRu    String   @map("name_ru")
+  city      String   @default("Baku")
+  latitude  Float?
+  longitude Float?
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  properties Property[]
+
+  @@index([city])
+  @@index([isActive])
+  @@map("districts")
+}
+
+// ---------------------------------------------------------------------------
+// Properties
+// ---------------------------------------------------------------------------
+
+model Property {
+  id           String        @id @default(cuid())
+  slug         String        @unique
+  listingType  ListingType   @map("listing_type")
+  propertyType PropertyType  @map("property_type")
+  status       ListingStatus @default(DRAFT)
+
+  price    Decimal @db.Decimal(14, 2)
+  currency String  @default("AZN")
+
+  districtId String   @map("district_id")
+  district   District @relation(fields: [districtId], references: [id])
+
+  addressAz String  @map("address_az")
+  addressEn String? @map("address_en")
+  addressRu String? @map("address_ru")
+  latitude  Float
+  longitude Float
+
+  titleAz       String  @map("title_az")
+  titleEn       String? @map("title_en")
+  titleRu       String? @map("title_ru")
+  descriptionAz String  @map("description_az") @db.Text
+  descriptionEn String? @map("description_en") @db.Text
+  descriptionRu String? @map("description_ru") @db.Text
+
+  rooms       Int
+  bedrooms    Int?
+  bathrooms   Int?
+  areaSqm     Float   @map("area_sqm")
+  floor       Int?
+  totalFloors Int?    @map("total_floors")
+  yearBuilt   Int?    @map("year_built")
+
+  ownerId String @map("owner_id")
+  owner   User   @relation("PropertyOwner", fields: [ownerId], references: [id])
+
+  agentId String?       @map("agent_id")
+  agent   AgentProfile? @relation("PropertyAgent", fields: [agentId], references: [id])
+
+  isFeatured  Boolean @default(false) @map("is_featured")
+  viewCount   Int     @default(0) @map("view_count")
+  publishedAt DateTime? @map("published_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  photos     PropertyPhoto[]
+  amenities  PropertyAmenity[]
+  floorPlans FloorPlan[]
+  inquiries  Inquiry[]
+  favorites  Favorite[]
+
+  @@index([listingType, status])
+  @@index([districtId])
+  @@index([price])
+  @@index([rooms])
+  @@index([propertyType])
+  @@index([status, publishedAt(sort: Desc)])
+  @@index([latitude, longitude])
+  @@index([isFeatured])
+  @@index([ownerId])
+  @@index([agentId])
+  @@map("properties")
+}
+
+model PropertyPhoto {
+  id         String   @id @default(cuid())
+  propertyId String   @map("property_id")
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  url        String
+  altAz      String?  @map("alt_az")
+  altEn      String?  @map("alt_en")
+  altRu      String?  @map("alt_ru")
+  sortOrder  Int      @default(0) @map("sort_order")
+  isPrimary  Boolean  @default(false) @map("is_primary")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([propertyId, sortOrder])
+  @@index([propertyId, isPrimary])
+  @@map("property_photos")
+}
+
+model Amenity {
+  id       String  @id @default(cuid())
+  slug     String  @unique
+  nameAz   String  @map("name_az")
+  nameEn   String  @map("name_en")
+  nameRu   String  @map("name_ru")
+  icon     String?
+  category String?
+
+  properties PropertyAmenity[]
+
+  @@index([category])
+  @@map("amenities")
+}
+
+model PropertyAmenity {
+  propertyId String @map("property_id")
+  amenityId  String @map("amenity_id")
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  amenity  Amenity  @relation(fields: [amenityId], references: [id], onDelete: Cascade)
+
+  @@id([propertyId, amenityId])
+  @@map("property_amenities")
+}
+
+model FloorPlan {
+  id         String   @id @default(cuid())
+  propertyId String   @map("property_id")
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  url        String
+  labelAz    String?  @map("label_az")
+  labelEn    String?  @map("label_en")
+  labelRu    String?  @map("label_ru")
+  areaSqm    Float?   @map("area_sqm")
+  sortOrder  Int      @default(0) @map("sort_order")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([propertyId, sortOrder])
+  @@map("floor_plans")
+}
+
+// ---------------------------------------------------------------------------
+// Inquiries & Favorites
+// ---------------------------------------------------------------------------
+
+model Inquiry {
+  id         String  @id @default(cuid())
+  propertyId String  @map("property_id")
+  property   Property @relation(fields: [propertyId], references: [id])
+
+  userId String? @map("user_id")
+  user   User?   @relation("InquiryRequester", fields: [userId], references: [id])
+
+  assignedAgentId String? @map("assigned_agent_id")
+  assignedAgent   User?   @relation("InquiryAssignee", fields: [assignedAgentId], references: [id])
+
+  name    String
+  email   String
+  phone   String
+  message String        @db.Text
+  status  InquiryStatus @default(NEW)
+
+  guestToken String? @map("guest_token")
+
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  respondedAt DateTime? @map("responded_at")
+  closedAt    DateTime? @map("closed_at")
+
+  statusHistory InquiryStatusHistory[]
+
+  @@index([propertyId])
+  @@index([userId])
+  @@index([status])
+  @@index([assignedAgentId])
+  @@index([createdAt(sort: Desc)])
+  @@index([status, createdAt(sort: Desc)])
+  @@map("inquiries")
+}
+
+model InquiryStatusHistory {
+  id          String         @id @default(cuid())
+  inquiryId   String         @map("inquiry_id")
+  inquiry     Inquiry        @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  fromStatus  InquiryStatus? @map("from_status")
+  toStatus    InquiryStatus  @map("to_status")
+  note        String?        @db.Text
+  changedById String?        @map("changed_by_id")
+  createdAt   DateTime       @default(now()) @map("created_at")
+
+  @@index([inquiryId, createdAt(sort: Desc)])
+  @@map("inquiry_status_history")
+}
+
+model Favorite {
+  id         String   @id @default(cuid())
+  userId     String   @map("user_id")
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  propertyId String   @map("property_id")
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, propertyId])
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([propertyId])
+  @@map("favorites")
+}

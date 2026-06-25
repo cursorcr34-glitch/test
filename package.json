@@ -1,0 +1,17 @@
+{
+  "name": "emlak-platform",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "db:generate": "npm run generate --workspace=@emlak/db",
+    "db:build": "npm run build --workspace=@emlak/db",
+    "db:migrate": "npm run migrate --workspace=@emlak/db",
+    "db:migrate:deploy": "npm run migrate:deploy --workspace=@emlak/db",
+    "db:seed": "npm run seed --workspace=@emlak/db",
+    "db:studio": "npm run studio --workspace=@emlak/db",
+    "api:build": "npm run build --workspace=@emlak/api",
+    "build": "npm run db:generate && npm run db:build && npm run api:build"
+  }
+}

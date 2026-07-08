@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="az">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Baki Rentacar - rahat, serfeli ve etibarli avtomobil icaresi xidmeti."
+    />
+    <title>Baki Rentacar | Avtomobil Icaresi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav container" aria-label="Esas menyu">
+        <a class="brand" href="#home" aria-label="Baki Rentacar ana sehife">
+          <span class="brand-mark">BR</span>
+          <span>Baki Rentacar</span>
+        </a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu">
+          <span class="sr-only">Menyunu ac</span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <div class="nav-menu" id="nav-menu">
+          <a href="#cars">Avtomobiller</a>
+          <a href="#services">Xidmetler</a>
+          <a href="#booking">Rezervasiya</a>
+          <a href="#contact">Elaqe</a>
+        </div>
+        <a class="nav-cta" href="tel:+994501234567">+994 50 123 45 67</a>
+      </nav>
+    </header>
+
+    <main id="home">
+      <section class="hero">
+        <div class="hero-bg" aria-hidden="true"></div>
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">24/7 avtomobil icaresi</p>
+            <h1>Baki ve regionlar ucun rahat rentacar xidmeti</h1>
+            <p class="hero-text">
+              Ekonom, biznes ve SUV sinif avtomobilleri gunluk, heftelik ve uzunmuddetli
+              icarə ucun serfeli qiymetlerle teklif edirik.
+            </p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#booking">Masin rezerv et</a>
+              <a class="button button-secondary" href="#cars">Parki goster</a>
+            </div>
+            <div class="hero-stats" aria-label="Sirket statistikasi">
+              <div>
+                <strong>60+</strong>
+                <span>Avtomobil</span>
+              </div>
+              <div>
+                <strong>4.9/5</strong>
+                <span>Musteri reytinqi</span>
+              </div>
+              <div>
+                <strong>15 dk</strong>
+                <span>Tesdiq vaxti</span>
+              </div>
+            </div>
+          </div>
+          <aside class="hero-card" aria-label="Suretli rezervasiya">
+            <div class="price-badge">
+              <span>Gunluk</span>
+              <strong>45 AZN-dan</strong>
+            </div>
+            <h2>Bu gun yola cixin</h2>
+            <p>
+              Aeroport, otel ve seher daxili unvanlara catdirilma. Depozit ve sigorta sertleri
+              rezervasiyadan once aydin izah olunur.
+            </p>
+            <ul class="check-list">
+              <li>Tam sigorta paketi</li>
+              <li>Pulsuz bron tesdiqi</li>
+              <li>Temiz ve texniki baximli avtomobiller</li>
+            </ul>
+          </aside>
+        </div>
+      </section>
+
+      <section class="search-panel container" aria-label="Icare axtarisi">
+        <form class="quick-search">
+          <label>
+            Goturme yeri
+            <select name="pickup">
+              <option>Baki seheri</option>
+              <option>Heyder Aliyev Aeroportu</option>
+              <option>Sumqayit</option>
+              <option>Gence</option>
+            </select>
+          </label>
+          <label>
+            Tarix
+            <input type="date" name="date" />
+          </label>
+          <label>
+            Avtomobil sinfi
+            <select name="class">
+              <option>Butun sinifler</option>
+              <option>Ekonom</option>
+              <option>Biznes</option>
+              <option>SUV</option>
+            </select>
+          </label>
+          <a class="button button-primary" href="#cars">Teklifleri goster</a>
+        </form>
+      </section>
+
+      <section class="section container" id="cars">
+        <div class="section-heading">
+          <p class="eyebrow">Avtomobil parki</p>
+          <h2>Her sefer ucun uygun model</h2>
+          <p>
+            Seher ici isler, aile seyahati ve biznes gorusleri ucun secilmis populyar
+            modeller.
+          </p>
+        </div>
+
+        <div class="filter-buttons" role="group" aria-label="Avtomobil sinfi secimi">
+          <button class="filter-button active" type="button" data-filter="all">Hamisi</button>
+          <button class="filter-button" type="button" data-filter="economy">Ekonom</button>
+          <button class="filter-button" type="button" data-filter="business">Biznes</button>
+          <button class="filter-button" type="button" data-filter="suv">SUV</button>
+        </div>
+
+        <div class="cars-grid">
+          <article class="car-card" data-category="economy">
+            <div class="car-visual economy-car" aria-hidden="true"></div>
+            <div class="car-card-body">
+              <div class="car-title">
+                <h3>Hyundai Accent</h3>
+                <span>Ekonom</span>
+              </div>
+              <ul class="car-features">
+                <li>Avtomat</li>
+                <li>5 yer</li>
+                <li>6.2 L / 100 km</li>
+              </ul>
+              <div class="car-footer">
+                <p><strong>45 AZN</strong><span>/ gun</span></p>
+                <a href="#booking" class="text-link" data-car="Hyundai Accent">Sec</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="car-card" data-category="business">
+            <div class="car-visual business-car" aria-hidden="true"></div>
+            <div class="car-card-body">
+              <div class="car-title">
+                <h3>Toyota Camry</h3>
+                <span>Biznes</span>
+              </div>
+              <ul class="car-features">
+                <li>Avtomat</li>
+                <li>5 yer</li>
+                <li>Deri salon</li>
+              </ul>
+              <div class="car-footer">
+                <p><strong>85 AZN</strong><span>/ gun</span></p>
+                <a href="#booking" class="text-link" data-car="Toyota Camry">Sec</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="car-card" data-category="suv">
+            <div class="car-visual suv-car" aria-hidden="true"></div>
+            <div class="car-card-body">
+              <div class="car-title">
+                <h3>Kia Sportage</h3>
+                <span>SUV</span>
+              </div>
+              <ul class="car-features">
+                <li>Avtomat</li>
+                <li>5 yer</li>
+                <li>Boyuk baqaj</li>
+              </ul>
+              <div class="car-footer">
+                <p><strong>75 AZN</strong><span>/ gun</span></p>
+                <a href="#booking" class="text-link" data-car="Kia Sportage">Sec</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="car-card" data-category="business">
+            <div class="car-visual premium-car" aria-hidden="true"></div>
+            <div class="car-card-body">
+              <div class="car-title">
+                <h3>Mercedes E-Class</h3>
+                <span>Premium</span>
+              </div>
+              <ul class="car-features">
+                <li>Avtomat</li>
+                <li>5 yer</li>
+                <li>Premium komfort</li>
+              </ul>
+              <div class="car-footer">
+                <p><strong>140 AZN</strong><span>/ gun</span></p>
+                <a href="#booking" class="text-link" data-car="Mercedes E-Class">Sec</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="car-card" data-category="economy">
+            <div class="car-visual compact-car" aria-hidden="true"></div>
+            <div class="car-card-body">
+              <div class="car-title">
+                <h3>Kia Rio</h3>
+                <span>Ekonom</span>
+              </div>
+              <ul class="car-features">
+                <li>Avtomat</li>
+                <li>5 yer</li>
+                <li>Kondisioner</li>
+              </ul>
+              <div class="car-footer">
+                <p><strong>50 AZN</strong><span>/ gun</span></p>
+                <a href="#booking" class="text-link" data-car="Kia Rio">Sec</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="car-card" data-category="suv">
+            <div class="car-visual family-car" aria-hidden="true"></div>
+            <div class="car-card-body">
+              <div class="car-title">
+                <h3>Hyundai Santa Fe</h3>
+                <span>SUV</span>
+              </div>
+              <ul class="car-features">
+                <li>Avtomat</li>
+                <li>7 yer</li>
+                <li>Aile ucun ideal</li>
+              </ul>
+              <div class="car-footer">
+                <p><strong>110 AZN</strong><span>/ gun</span></p>
+                <a href="#booking" class="text-link" data-car="Hyundai Santa Fe">Sec</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section services-section" id="services">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Niye biz?</p>
+            <h2>Rentacar prosesini sade edirik</h2>
+          </div>
+          <div class="services-grid">
+            <article class="service-card">
+              <span class="service-icon">01</span>
+              <h3>Suretli bron</h3>
+              <p>Formu doldurun, operator qiymet ve movcudlugu qisa zamanda tesdiq etsin.</p>
+            </article>
+            <article class="service-card">
+              <span class="service-icon">02</span>
+              <h3>Unvana catdirilma</h3>
+              <p>Avtomobili aeroport, otel, ofis ve ya evinizden tehvil ala bilersiniz.</p>
+            </article>
+            <article class="service-card">
+              <span class="service-icon">03</span>
+              <h3>Seffaf qiymet</h3>
+              <p>Gizli xercler olmadan gunluk qiymet, depozit ve sigorta sertleri onceden bildirilir.</p>
+            </article>
+            <article class="service-card">
+              <span class="service-icon">04</span>
+              <h3>Texniki destek</h3>
+              <p>Yolda ehtiyac yaranarsa komandamiz 24/7 destek gostermeye hazirdir.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section container booking-section" id="booking">
+        <div class="booking-copy">
+          <p class="eyebrow">Rezervasiya</p>
+          <h2>Avtomobilinizi indi bron edin</h2>
+          <p>
+            Melumatlari daxil edin, sizinle elaqe saxlayib uygun modeli, catdirilma vaxtini
+            ve yekun qiymeti tesdiq edek.
+          </p>
+          <div class="contact-card">
+            <strong>Tecili sifaris ucun</strong>
+            <a href="tel:+994501234567">+994 50 123 45 67</a>
+            <a href="mailto:info@bakirentacar.az">info@bakirentacar.az</a>
+          </div>
+        </div>
+
+        <form class="booking-form" id="booking-form">
+          <div class="form-row">
+            <label>
+              Ad Soyad
+              <input type="text" name="name" placeholder="Adiniz" required />
+            </label>
+            <label>
+              Telefon
+              <input type="tel" name="phone" placeholder="+994..." required />
+            </label>
+          </div>
+          <div class="form-row">
+            <label>
+              Avtomobil
+              <select name="car" id="car-select">
+                <option>Hyundai Accent</option>
+                <option>Toyota Camry</option>
+                <option>Kia Sportage</option>
+                <option>Mercedes E-Class</option>
+                <option>Kia Rio</option>
+                <option>Hyundai Santa Fe</option>
+              </select>
+            </label>
+            <label>
+              Icare muddeti
+              <select name="period">
+                <option>1-3 gun</option>
+                <option>4-7 gun</option>
+                <option>8-30 gun</option>
+                <option>Uzunmuddetli</option>
+              </select>
+            </label>
+          </div>
+          <div class="form-row">
+            <label>
+              Goturme tarixi
+              <input type="date" name="pickup-date" required />
+            </label>
+            <label>
+              Qaytarma tarixi
+              <input type="date" name="return-date" required />
+            </label>
+          </div>
+          <label>
+            Elave qeyd
+            <textarea name="note" rows="4" placeholder="Catdirilma unvani ve elave istekler"></textarea>
+          </label>
+          <button class="button button-primary" type="submit">Bron sorğusu gonder</button>
+          <p class="form-message" id="form-message" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <section class="testimonial-section">
+        <div class="container testimonial-card">
+          <blockquote>
+            "Aeroportdan avtomobili vaxtinda tehvil aldik. Masin temiz idi, qiymet de onceden
+            deyilene uygun oldu."
+          </blockquote>
+          <div>
+            <strong>Rauf M.</strong>
+            <span>Biznes musteri</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer" id="contact">
+      <div class="container footer-grid">
+        <div>
+          <a class="brand footer-brand" href="#home">
+            <span class="brand-mark">BR</span>
+            <span>Baki Rentacar</span>
+          </a>
+          <p>Etibarli avtomobil icaresi, seffaf qiymetler ve 24/7 destek.</p>
+        </div>
+        <div>
+          <h3>Elaqe</h3>
+          <a href="tel:+994501234567">+994 50 123 45 67</a>
+          <a href="mailto:info@bakirentacar.az">info@bakirentacar.az</a>
+          <span>Baki, Azerbaycan</span>
+        </div>
+        <div>
+          <h3>Is saatlari</h3>
+          <span>Her gun: 09:00 - 21:00</span>
+          <span>Texniki destek: 24/7</span>
+        </div>
+      </div>
+      <div class="container footer-bottom">
+        <span>© 2026 Baki Rentacar. Butun huquqlar qorunur.</span>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

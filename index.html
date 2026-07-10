@@ -14,6 +14,20 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
+    <script>
+      (() => {
+        const baseWidth = 966;
+        const baseHeight = 500;
+
+        const resizePage = () => {
+          document.documentElement.style.setProperty("--page-scale-x", window.innerWidth / baseWidth);
+          document.documentElement.style.setProperty("--page-scale-y", window.innerHeight / baseHeight);
+        };
+
+        resizePage();
+        window.addEventListener("resize", resizePage, { passive: true });
+      })();
+    </script>
     <style>
       :root {
         --bg: #01051a;
@@ -33,6 +47,8 @@
 
       html,
       body {
+        width: 100%;
+        height: 100%;
         min-height: 100%;
       }
 
@@ -54,18 +70,22 @@
       }
 
       .page {
-        width: min(966px, calc(100vw - 58px));
+        width: 966px;
+        height: 500px;
         min-height: 500px;
-        margin: 11px auto;
+        margin: 0;
         position: relative;
         overflow: hidden;
         border: 1px solid rgba(84, 103, 174, 0.38);
-        border-radius: 9px;
+        border-radius: 0;
         background:
           radial-gradient(circle at 87% 46%, rgba(101, 53, 255, 0.3) 0 18%, transparent 47%),
           radial-gradient(circle at 4% 37%, rgba(22, 71, 225, 0.32), transparent 36%),
           linear-gradient(180deg, #07102f 0%, #020823 33%, #01051a 100%);
         box-shadow: 0 22px 80px rgba(0, 0, 0, 0.46);
+        transform: scale(var(--page-scale-x, 1), var(--page-scale-y, 1));
+        transform-origin: center;
+        will-change: transform;
       }
 
       .page::before {
@@ -794,9 +814,124 @@
           padding: 0 19px 22px;
         }
       }
+
+      body.fullscreen-zoom {
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+      }
+
+      body.fullscreen-zoom .page {
+        width: 966px;
+        height: 500px;
+        min-height: 500px;
+        margin: 0;
+        border-radius: 0;
+        transform: scale(var(--page-scale-x, 1), var(--page-scale-y, 1));
+        transform-origin: center;
+      }
+
+      body.fullscreen-zoom .site-header {
+        grid-template-columns: 180px 1fr 180px;
+        row-gap: 0;
+        padding: 12px 15px 0 28px;
+      }
+
+      body.fullscreen-zoom .logo {
+        justify-self: auto;
+      }
+
+      body.fullscreen-zoom .win-counter {
+        grid-column: auto;
+        grid-row: auto;
+        min-width: 510px;
+        width: auto;
+        height: 44px;
+        flex-direction: row;
+        gap: 24px;
+        padding: 0 30px 0 25px;
+        order: 0;
+      }
+
+      body.fullscreen-zoom .counter-copy {
+        justify-content: flex-start;
+        text-align: left;
+        white-space: nowrap;
+      }
+
+      body.fullscreen-zoom .hr-panel {
+        justify-self: end;
+      }
+
+      body.fullscreen-zoom .main-nav {
+        gap: 45px;
+        margin-top: 25px;
+        padding-left: 36px;
+        flex-wrap: nowrap;
+      }
+
+      body.fullscreen-zoom .hero {
+        display: grid;
+        grid-template-columns: 45% 55%;
+        min-height: 317px;
+        padding: 39px 37px 0;
+        text-align: left;
+      }
+
+      body.fullscreen-zoom h1 {
+        font-size: clamp(49px, 5.7vw, 55px);
+        letter-spacing: -2.7px;
+      }
+
+      body.fullscreen-zoom .subtitle {
+        font-size: 20px;
+      }
+
+      body.fullscreen-zoom .actions {
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+      }
+
+      body.fullscreen-zoom .btn {
+        width: auto;
+        min-width: 179px;
+      }
+
+      body.fullscreen-zoom .btn-secondary {
+        min-width: 124px;
+      }
+
+      body.fullscreen-zoom .visual {
+        position: absolute;
+        right: -11px;
+        bottom: 52px;
+        width: 527px;
+        height: 377px;
+        margin: 0;
+        transform: none;
+      }
+
+      body.fullscreen-zoom .purple-disc {
+        right: 39px;
+        bottom: -67px;
+        width: 448px;
+        height: 448px;
+        transform: none;
+      }
+
+      body.fullscreen-zoom .people {
+        right: 29px;
+        bottom: -45px;
+        transform: none;
+      }
+
+      body.fullscreen-zoom .features {
+        grid-template-columns: repeat(3, 1fr);
+        padding: 0 37px 13px;
+      }
     </style>
   </head>
-  <body>
+  <body class="fullscreen-zoom">
     <div class="page" aria-label="Jobera landing page">
       <header class="site-header">
         <a class="logo" href="#" aria-label="Jobera ana sehife">jobera<span>.az</span></a>

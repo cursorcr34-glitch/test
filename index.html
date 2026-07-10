@@ -213,8 +213,8 @@
         z-index: 3;
         display: grid;
         grid-template-columns: minmax(380px, 43vw) 1fr;
-        flex: 1;
-        min-height: 0;
+        flex: 0 0 auto;
+        min-height: clamp(310px, 42vh, 390px);
         padding: clamp(38px, 6vh, 74px) clamp(42px, 6vw, 88px) 0;
       }
 
@@ -642,7 +642,7 @@
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: clamp(16px, 1.5vw, 22px);
-        margin-top: auto;
+        margin-top: clamp(18px, 2.6vh, 32px);
         padding: 0 clamp(42px, 6vw, 88px) clamp(20px, 3vh, 34px);
       }
 

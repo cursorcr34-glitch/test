@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="az">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Jobera - Dogru ise Dogru namized</title>
+    <meta
+      name="description"
+      content="Jobera.az - Seffaf vakansiyalar, agilli uygunluq ve etibarli fursetler platformasi"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #01051a;
+        --panel: #050b2c;
+        --panel-soft: #131936;
+        --white: #ffffff;
+        --muted: #a7adbf;
+        --purple: #5e3df5;
+        --purple-2: #6d35ff;
+        --green: #46f07b;
+        --blue: #5bb8ff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        min-height: 100%;
+      }
+
+      body {
+        margin: 0;
+        display: grid;
+        place-items: center;
+        overflow-x: hidden;
+        background:
+          radial-gradient(circle at 50% 100%, rgba(47, 73, 210, 0.22), transparent 46%),
+          var(--bg);
+        color: var(--white);
+        font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      button,
+      a {
+        font: inherit;
+      }
+
+      .page {
+        width: min(966px, calc(100vw - 58px));
+        min-height: 500px;
+        margin: 11px auto;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(84, 103, 174, 0.38);
+        border-radius: 9px;
+        background:
+          radial-gradient(circle at 87% 46%, rgba(101, 53, 255, 0.3) 0 18%, transparent 47%),
+          radial-gradient(circle at 4% 37%, rgba(22, 71, 225, 0.32), transparent 36%),
+          linear-gradient(180deg, #07102f 0%, #020823 33%, #01051a 100%);
+        box-shadow: 0 22px 80px rgba(0, 0, 0, 0.46);
+      }
+
+      .page::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background:
+          linear-gradient(90deg, rgba(22, 57, 160, 0.22), transparent 28%),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent 18%);
+      }
+
+      .site-header {
+        position: relative;
+        z-index: 6;
+        display: grid;
+        grid-template-columns: 180px 1fr 180px;
+        align-items: start;
+        padding: 12px 15px 0 28px;
+      }
+
+      .logo {
+        margin-top: 4px;
+        color: #f8fbff;
+        font-size: 25px;
+        font-weight: 800;
+        letter-spacing: -1.2px;
+        text-decoration: none;
+      }
+
+      .logo span {
+        color: var(--blue);
+      }
+
+      .win-counter {
+        justify-self: center;
+        min-width: 510px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 0 30px 0 25px;
+        border: 1px solid rgba(70, 240, 123, 0.95);
+        border-radius: 8px;
+        background:
+          radial-gradient(circle at 18% 50%, rgba(70, 240, 123, 0.18), transparent 28%),
+          rgba(1, 5, 26, 0.78);
+        box-shadow:
+          0 0 0 1px rgba(70, 240, 123, 0.12) inset,
+          0 0 17px rgba(70, 240, 123, 0.36);
+        color: var(--green);
+      }
+
+      .counter-copy {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        min-width: 0;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: -0.15px;
+        white-space: nowrap;
+      }
+
+      .counter-copy svg {
+        width: 29px;
+        height: 29px;
+        flex: 0 0 auto;
+        filter: drop-shadow(0 0 7px rgba(70, 240, 123, 0.8));
+      }
+
+      .counter-number {
+        font-size: 24px;
+        line-height: 1;
+        font-weight: 900;
+        letter-spacing: 1px;
+        text-shadow: 0 0 12px rgba(70, 240, 123, 0.65);
+        white-space: nowrap;
+      }
+
+      .hr-panel {
+        justify-self: end;
+        min-width: 106px;
+        min-height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 0 13px;
+        border: 1px solid rgba(139, 82, 255, 0.78);
+        border-radius: 8px;
+        background: rgba(11, 16, 44, 0.88);
+        color: #a579ff;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        box-shadow: 0 0 15px rgba(94, 61, 245, 0.12);
+      }
+
+      .hr-panel svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .main-nav {
+        position: relative;
+        z-index: 6;
+        display: flex;
+        justify-content: center;
+        gap: 45px;
+        margin-top: 25px;
+        padding-left: 36px;
+      }
+
+      .main-nav a {
+        color: #d8dce9;
+        font-size: 13px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: color 160ms ease;
+      }
+
+      .main-nav a:hover {
+        color: #ffffff;
+      }
+
+      .hero {
+        position: relative;
+        z-index: 3;
+        display: grid;
+        grid-template-columns: 45% 55%;
+        min-height: 317px;
+        padding: 39px 37px 0;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 5;
+      }
+
+      h1 {
+        margin: 0 0 18px;
+        font-size: clamp(49px, 5.7vw, 55px);
+        line-height: 1.12;
+        font-weight: 900;
+        letter-spacing: -2.7px;
+      }
+
+      h1 span {
+        color: var(--green);
+      }
+
+      .subtitle {
+        margin: 0 0 24px 2px;
+        color: #d5d7df;
+        font-size: 20px;
+        line-height: 1.36;
+        font-weight: 400;
+        letter-spacing: -0.5px;
+      }
+
+      .actions {
+        display: flex;
+        gap: 13px;
+        margin-left: 1px;
+      }
+
+      .btn {
+        min-width: 179px;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        border: 1px solid transparent;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: 800;
+        color: #ffffff;
+        text-decoration: none;
+        transition:
+          transform 160ms ease,
+          background-color 160ms ease,
+          border-color 160ms ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #6841ff, #5a28f5);
+        box-shadow: 0 10px 28px rgba(94, 61, 245, 0.24);
+      }
+
+      .btn-primary:hover {
+        background: linear-gradient(135deg, #7351ff, #6334ff);
+      }
+
+      .btn-secondary {
+        min-width: 124px;
+        border-color: rgba(255, 255, 255, 0.62);
+        background: rgba(3, 9, 32, 0.32);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .visual {
+        position: absolute;
+        right: -11px;
+        bottom: 52px;
+        width: 527px;
+        height: 377px;
+        z-index: 2;
+      }
+
+      .purple-disc {
+        position: absolute;
+        right: 39px;
+        bottom: -1px;
+        width: 448px;
+        height: 448px;
+        border-radius: 999px;
+        background:
+          radial-gradient(circle at 35% 25%, rgba(143, 89, 255, 0.95), rgba(91, 50, 232, 0.92) 47%, #4023bf 100%);
+        box-shadow:
+          0 0 65px rgba(94, 61, 245, 0.55),
+          inset 0 24px 70px rgba(255, 255, 255, 0.08);
+      }
+
+      .purple-disc::after {
+        content: "";
+        position: absolute;
+        inset: 11px;
+        border-radius: inherit;
+        background: linear-gradient(120deg, rgba(255, 255, 255, 0.08), transparent 43%);
+        opacity: 0.65;
+      }
+
+      .people {
+        position: absolute;
+        right: 29px;
+        bottom: -45px;
+        width: 471px;
+        height: 390px;
+        filter: drop-shadow(0 19px 24px rgba(0, 0, 0, 0.38));
+      }
+
+      .person {
+        position: absolute;
+        bottom: 0;
+      }
+
+      .person.woman {
+        left: 18px;
+        width: 192px;
+        height: 320px;
+        z-index: 2;
+      }
+
+      .person.man {
+        right: 15px;
+        width: 258px;
+        height: 382px;
+        z-index: 3;
+      }
+
+      .head {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 50% 50% 46% 46%;
+        background:
+          radial-gradient(circle at 58% 41%, rgba(255, 255, 255, 0.52) 0 4%, transparent 5%),
+          linear-gradient(160deg, #ffe5d1, #c98963 88%);
+        box-shadow: inset -9px -12px 18px rgba(101, 45, 26, 0.16);
+      }
+
+      .woman .head {
+        top: 32px;
+        width: 74px;
+        height: 88px;
+      }
+
+      .man .head {
+        top: 19px;
+        width: 86px;
+        height: 98px;
+      }
+
+      .hair {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: -1;
+      }
+
+      .woman .hair {
+        top: 19px;
+        width: 96px;
+        height: 151px;
+        border-radius: 48% 48% 43% 43%;
+        background: linear-gradient(140deg, #22100e 0%, #321713 60%, #100808 100%);
+        box-shadow:
+          -22px 43px 0 -17px #1c0d0c,
+          19px 45px 0 -17px #130807;
+      }
+
+      .man .hair {
+        top: 6px;
+        width: 92px;
+        height: 50px;
+        border-radius: 46px 46px 18px 20px;
+        background: linear-gradient(155deg, #2f1812, #140907 80%);
+        box-shadow: 0 14px 0 -8px #1a0c09;
+      }
+
+      .face {
+        position: absolute;
+        left: 50%;
+        top: 46%;
+        width: 42%;
+        height: 19%;
+        transform: translate(-50%, -50%);
+      }
+
+      .face::before,
+      .face::after {
+        content: "";
+        position: absolute;
+        top: 2px;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: #17131a;
+      }
+
+      .face::before {
+        left: 4px;
+      }
+
+      .face::after {
+        right: 4px;
+      }
+
+      .smile {
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        width: 23px;
+        height: 10px;
+        transform: translateX(-50%);
+        border-bottom: 3px solid #f9f8f4;
+        border-radius: 0 0 20px 20px;
+      }
+
+      .neck {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(160deg, #edbc99, #b97454);
+      }
+
+      .woman .neck {
+        top: 112px;
+        width: 30px;
+        height: 34px;
+      }
+
+      .man .neck {
+        top: 108px;
+        width: 35px;
+        height: 43px;
+      }
+
+      .torso {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        overflow: hidden;
+      }
+
+      .woman .torso {
+        bottom: 0;
+        width: 170px;
+        height: 205px;
+        border-radius: 37px 37px 9px 9px;
+        background: linear-gradient(115deg, #101924, #252c34 62%, #060b13);
+        clip-path: polygon(15% 0, 86% 0, 100% 100%, 0 100%);
+      }
+
+      .man .torso {
+        bottom: 0;
+        width: 220px;
+        height: 267px;
+        border-radius: 41px 41px 9px 9px;
+        background: linear-gradient(120deg, #101b32, #0f315d 52%, #081323);
+        clip-path: polygon(18% 0, 82% 0, 100% 100%, 0 100%);
+      }
+
+      .shirt {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #f5f7fb;
+      }
+
+      .woman .shirt {
+        top: 0;
+        width: 54px;
+        height: 127px;
+        clip-path: polygon(12% 0, 88% 0, 100% 100%, 0 100%);
+      }
+
+      .man .shirt {
+        top: 0;
+        width: 78px;
+        height: 180px;
+        clip-path: polygon(0 0, 100% 0, 86% 100%, 17% 100%);
+      }
+
+      .lapel {
+        position: absolute;
+        top: 0;
+        width: 64px;
+        height: 142px;
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .woman .lapel.left {
+        left: 24px;
+        clip-path: polygon(0 0, 100% 0, 52% 100%, 18% 100%);
+      }
+
+      .woman .lapel.right {
+        right: 24px;
+        clip-path: polygon(0 0, 100% 0, 83% 100%, 49% 100%);
+      }
+
+      .man .lapel.left {
+        left: 34px;
+        width: 76px;
+        height: 177px;
+        clip-path: polygon(0 0, 100% 0, 58% 100%, 13% 100%);
+      }
+
+      .man .lapel.right {
+        right: 34px;
+        width: 76px;
+        height: 177px;
+        clip-path: polygon(0 0, 100% 0, 88% 100%, 42% 100%);
+      }
+
+      .arm {
+        position: absolute;
+        background: linear-gradient(120deg, #172237, #09111f);
+        border-radius: 999px;
+      }
+
+      .woman .arm.left {
+        left: 0;
+        bottom: 63px;
+        width: 123px;
+        height: 29px;
+        transform: rotate(-28deg);
+      }
+
+      .woman .arm.right {
+        right: 0;
+        bottom: 67px;
+        width: 123px;
+        height: 29px;
+        transform: rotate(28deg);
+      }
+
+      .man .arm.left {
+        left: 8px;
+        bottom: 95px;
+        width: 168px;
+        height: 36px;
+        transform: rotate(-17deg);
+      }
+
+      .man .arm.right {
+        right: 8px;
+        bottom: 99px;
+        width: 168px;
+        height: 36px;
+        transform: rotate(17deg);
+      }
+
+      .hand {
+        position: absolute;
+        width: 33px;
+        height: 21px;
+        border-radius: 999px;
+        background: linear-gradient(160deg, #f1c09c, #b77655);
+      }
+
+      .woman .hand.left {
+        left: 53px;
+        bottom: 53px;
+        transform: rotate(-24deg);
+      }
+
+      .woman .hand.right {
+        right: 52px;
+        bottom: 56px;
+        transform: rotate(24deg);
+      }
+
+      .man .hand.left {
+        left: 83px;
+        bottom: 86px;
+        transform: rotate(-13deg);
+      }
+
+      .man .hand.right {
+        right: 82px;
+        bottom: 90px;
+        transform: rotate(13deg);
+      }
+
+      .beard {
+        position: absolute;
+        left: 50%;
+        top: 62px;
+        width: 50px;
+        height: 47px;
+        transform: translateX(-50%);
+        border-radius: 0 0 48% 48%;
+        border-bottom: 13px solid rgba(72, 34, 20, 0.75);
+      }
+
+      .features {
+        position: relative;
+        z-index: 7;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        padding: 0 37px 13px;
+      }
+
+      .feature-card {
+        min-height: 74px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 15px 21px 16px 30px;
+        border: 1px solid rgba(255, 255, 255, 0.055);
+        border-radius: 8px;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.04)),
+          rgba(28, 34, 62, 0.76);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+        backdrop-filter: blur(10px);
+      }
+
+      .feature-icon {
+        width: 38px;
+        height: 38px;
+        flex: 0 0 auto;
+        display: grid;
+        place-items: center;
+        border-radius: 11px;
+        background:
+          radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.16), transparent 42%),
+          linear-gradient(135deg, #6e43ff, #552df0);
+        box-shadow: 0 9px 25px rgba(94, 61, 245, 0.34);
+      }
+
+      .feature-icon svg {
+        width: 21px;
+        height: 21px;
+      }
+
+      .feature-label {
+        margin: 0 0 3px;
+        color: #bbc0cf;
+        font-size: 12px;
+        line-height: 1.32;
+        font-weight: 500;
+      }
+
+      .feature-value {
+        margin: 0;
+        color: #ffffff;
+        font-size: 18px;
+        line-height: 1.1;
+        font-weight: 800;
+        letter-spacing: -0.3px;
+      }
+
+      @media (max-width: 900px) {
+        body {
+          display: block;
+        }
+
+        .page {
+          width: min(100% - 28px, 620px);
+          min-height: 0;
+          margin: 14px auto;
+        }
+
+        .site-header {
+          grid-template-columns: 1fr auto;
+          row-gap: 14px;
+          padding: 18px 18px 0;
+        }
+
+        .win-counter {
+          grid-column: 1 / -1;
+          grid-row: 2;
+          min-width: 0;
+          width: 100%;
+          order: 3;
+        }
+
+        .main-nav {
+          gap: 24px;
+          margin-top: 18px;
+          padding: 0 16px;
+          flex-wrap: wrap;
+        }
+
+        .hero {
+          display: block;
+          padding: 34px 28px 0;
+        }
+
+        .visual {
+          position: relative;
+          right: auto;
+          bottom: auto;
+          width: min(100%, 480px);
+          height: 338px;
+          margin: 18px auto 0;
+        }
+
+        .purple-disc {
+          right: 50%;
+          transform: translateX(50%);
+          width: 390px;
+          height: 390px;
+        }
+
+        .people {
+          right: 50%;
+          transform: translateX(50%) scale(0.88);
+          transform-origin: bottom center;
+        }
+
+        .features {
+          grid-template-columns: 1fr;
+          padding: 18px 28px 28px;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .page {
+          width: calc(100% - 18px);
+          border-radius: 12px;
+        }
+
+        .site-header {
+          grid-template-columns: 1fr;
+        }
+
+        .logo,
+        .hr-panel {
+          justify-self: center;
+        }
+
+        .win-counter {
+          height: auto;
+          flex-direction: column;
+          gap: 8px;
+          padding: 12px;
+        }
+
+        .counter-copy {
+          white-space: normal;
+          justify-content: center;
+          text-align: center;
+        }
+
+        .hero {
+          padding: 30px 19px 0;
+          text-align: center;
+        }
+
+        h1 {
+          font-size: 42px;
+          letter-spacing: -1.9px;
+        }
+
+        .subtitle {
+          font-size: 17px;
+        }
+
+        .actions {
+          justify-content: center;
+          flex-wrap: wrap;
+        }
+
+        .btn,
+        .btn-secondary {
+          width: 100%;
+          min-width: 0;
+        }
+
+        .visual {
+          height: 294px;
+          margin-top: 6px;
+          transform: scale(0.82);
+          transform-origin: top center;
+        }
+
+        .features {
+          padding: 0 19px 22px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page" aria-label="Jobera landing page">
+      <header class="site-header">
+        <a class="logo" href="#" aria-label="Jobera ana sehife">jobera<span>.az</span></a>
+
+        <div class="win-counter" aria-label="Jobera ile musahibe sansi qazananlar">
+          <div class="counter-copy">
+            <svg viewBox="0 0 42 42" aria-hidden="true">
+              <g fill="currentColor">
+                <circle cx="16" cy="13" r="4" />
+                <path d="M8 28c.7-6.1 4.1-9.2 8-9.2s7.3 3.1 8 9.2v2.7H8z" />
+                <circle cx="29" cy="12" r="3.4" opacity=".75" />
+                <path d="M25.2 27.4c-.2-2.8-1.1-5.1-2.6-6.9 1.6-1.3 3.7-2 6.1-2 3.6 0 6.6 2.7 7.3 8.3v2.5H25.2z" opacity=".75" />
+                <circle cx="10" cy="7" r="1.5" />
+                <circle cx="31.5" cy="5.5" r="1.5" />
+                <circle cx="35" cy="14.5" r="1.2" />
+                <path d="M20 7h2.4v2.4h2.4v2.2h-2.4V14H20v-2.4h-2.4V9.4H20z" />
+                <path d="M28.5 32.5h2.1v2.1h2.1v1.9h-2.1v2.1h-2.1v-2.1h-2.1v-1.9h2.1z" />
+              </g>
+            </svg>
+            <span>Jobera ile müsahibə şansı qazananlar:</span>
+          </div>
+          <strong class="counter-number">12,458</strong>
+        </div>
+
+        <a class="hr-panel" href="#">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path
+              d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM12 14a7 7 0 0 0-7 7h14a7 7 0 0 0-7-7Z"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          HR Panel
+        </a>
+      </header>
+
+      <nav class="main-nav" aria-label="Esas menu">
+        <a href="#">Vakansiyalar</a>
+        <a href="#">Şirkətlər</a>
+        <a href="#">Karyera məsləhətləri</a>
+      </nav>
+
+      <main>
+        <section class="hero">
+          <div class="hero-content">
+            <h1>Doğru işə<br />Doğru <span>namizəd</span></h1>
+            <p class="subtitle">Şəffaf vakansiyalar, ağıllı uyğunluq<br />və etibarlı fürsətlər platforması</p>
+            <div class="actions">
+              <a class="btn btn-primary" href="#">Vakansiyaları ara</a>
+              <a class="btn btn-secondary" href="#">CV yarat</a>
+            </div>
+          </div>
+        </section>
+
+        <div class="visual" aria-hidden="true">
+          <div class="purple-disc"></div>
+          <div class="people">
+            <div class="person woman">
+              <div class="hair"></div>
+              <div class="head">
+                <div class="face"><span class="smile"></span></div>
+              </div>
+              <div class="neck"></div>
+              <div class="torso">
+                <div class="shirt"></div>
+                <div class="lapel left"></div>
+                <div class="lapel right"></div>
+              </div>
+              <div class="arm left"></div>
+              <div class="arm right"></div>
+              <div class="hand left"></div>
+              <div class="hand right"></div>
+            </div>
+            <div class="person man">
+              <div class="hair"></div>
+              <div class="head">
+                <div class="beard"></div>
+                <div class="face"><span class="smile"></span></div>
+              </div>
+              <div class="neck"></div>
+              <div class="torso">
+                <div class="shirt"></div>
+                <div class="lapel left"></div>
+                <div class="lapel right"></div>
+              </div>
+              <div class="arm left"></div>
+              <div class="arm right"></div>
+              <div class="hand left"></div>
+              <div class="hand right"></div>
+            </div>
+          </div>
+        </div>
+
+        <section class="features" aria-label="Jobera ustunlukleri">
+          <article class="feature-card">
+            <div class="feature-icon">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path
+                  d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM3 20a6 6 0 0 1 12 0v1H3v-1Z"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <div>
+              <p class="feature-label">Ödənişsiz vakansiya yerləşdirin</p>
+              <p class="feature-value">0 AZN</p>
+            </div>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path
+                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0 1 12 2.944a11.955 11.955 0 0 1-8.618 3.04A12.02 12.02 0 0 0 3 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016Z"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <div>
+              <p class="feature-label">Şəffaf və etibarlı sistem</p>
+              <p class="feature-value">100%</p>
+            </div>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path
+                  d="M13 10V3L4 14h7v7l9-11h-7Z"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <div>
+              <p class="feature-label">AI uyğunluq alqoritmi</p>
+              <p class="feature-value">Dəqiq nəticə</p>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
